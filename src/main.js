@@ -6,6 +6,7 @@ import axios from "axios";
 import store from "./store";
 import { render } from "react-dom";
 import Users from "./users";
+import User from "./user";
 
 export default class Main extends Component {
   constructor() {
@@ -13,6 +14,7 @@ export default class Main extends Component {
     this.state = store.getState();
     this.createUser = this.createUser.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
+    this.updateUser = this.updateUser.bind(this);
   }
   createUser(user) {
     axios
@@ -21,6 +23,18 @@ export default class Main extends Component {
       .then(user => {
         store.dispatch({
           type: "CREATE_USERS",
+          user
+        });
+      })
+      .catch(console.error);
+  }
+  updateUser(user, id) {
+    axios
+      .put(`/api/users/${id}`, { name: user })
+      .then(res => res.data)
+      .then(user => {
+        store.dispatch({
+          type: "UPDATE_USER",
           user
         });
       })
@@ -71,27 +85,35 @@ export default class Main extends Component {
   }
   render() {
     const { products, users } = this.state;
-    const { createUser, deleteUser } = this;
+    const { createUser, deleteUser, updateUser } = this;
     return (
       <Router>
         <div>
           <Nav />
+
           <Route
             path="/api/products"
             exact
             component={() => <Products products={products} />}
           />
-          <Route
-            path="/api/users"
-            exact
-            component={() => (
-              <Users
-                users={users}
-                createUser={createUser}
-                deleting={deleteUser}
-              />
-            )}
-          />
+          <switch>
+            <Route
+              path="/api/users"
+              exact
+              component={() => (
+                <Users
+                  users={users}
+                  createUser={createUser}
+                  deleting={deleteUser}
+                />
+              )}
+            />
+            <Route
+              path="/api/users/:id"
+              exact
+              component={() => <User users={users} updateUser={updateUser} />}
+            />
+          </switch>
         </div>
       </Router>
     );

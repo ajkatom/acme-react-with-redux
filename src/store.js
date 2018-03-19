@@ -18,11 +18,21 @@ const reducer = (state = initState, action) => {
       return Object.assign({}, state, { users: [...users, action.user] });
       break;
     case "DELETE_USER":
-      const index = users.findIndex(user => user.id === action.id * 1);
+      let index = users.findIndex(user => user.id === action.id * 1);
       return Object.assign({}, state, {
         users: [...users.slice(0, index), ...users.slice(index + 1)]
       });
 
+      break;
+    case "UPDATE_USER":
+      index = users.findIndex(user => user.id === action.user.id * 1);
+      return Object.assign({}, state, {
+        users: [
+          ...users.slice(0, index),
+          action.user,
+          ...users.slice(index + 1)
+        ]
+      });
       break;
   }
   return state;

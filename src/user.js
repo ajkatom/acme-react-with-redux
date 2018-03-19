@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import store from "./store";
+import { HashRouter as Router } from "react-router-dom";
 
-export default class Users extends Component {
+export default class User extends Component {
   constructor() {
     super();
     this.state = {
@@ -11,10 +11,9 @@ export default class Users extends Component {
     this.onClick = this.onClick.bind(this);
     this.onSave = this.onSave.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.deleteUser = this.deleteUser.bind(this);
   }
   onClick(ev) {
-    this.props.createUser(this.state.user);
+    this.props.updateUser(this.state.user, location.hash.slice(-1));
   }
   onSave(ev) {
     ev.preventDefault();
@@ -22,28 +21,17 @@ export default class Users extends Component {
   onChange(ev) {
     this.setState({ user: ev.target.value });
   }
-  deleteUser(ev) {
-    this.props.deleting(ev.target.value);
-  }
-
   render() {
     const { users } = this.props;
-    const { onClick, onSave, onChange, deleteUser } = this;
     const { user } = this.state;
+    const { onChange, onClick, onSave } = this;
+    const id = location.hash.slice(-1);
+
     return (
       <div>
-        <ul>
-          {users.map(user => {
-            return (
-              <li key={user.id}>
-                <Link to={`/api/users/${user.id}`}>{user.name}</Link>{" "}
-                <button value={user.id} onClick={deleteUser}>
-                  delete
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        {users.map(user => {
+          if (user.id === id * 1) return <h1 key={user.id}>{user.name}</h1>;
+        })}
         <form onSubmit={onSave}>
           <input value={user} onChange={onChange} />
           <button value={user} onClick={onClick}>
