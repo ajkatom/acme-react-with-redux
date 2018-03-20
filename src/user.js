@@ -34,7 +34,7 @@ export default class User extends Component {
         })}
         <form onSubmit={onSave}>
           <input value={user} onChange={onChange} />
-          <button value={user} onClick={onClick}>
+          <button value={user} onClick={onClick} disabled={!user.length}>
             update
           </button>
         </form>
