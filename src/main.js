@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { HashRouter as Router, Route } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import Products from "./products";
 import Nav from "./nav";
 import axios from "axios";
@@ -96,7 +96,7 @@ export default class Main extends Component {
             exact
             component={() => <Products products={products} />}
           />
-          <switch>
+          <Switch>
             <Route
               path="/api/users"
               exact
@@ -113,7 +113,7 @@ export default class Main extends Component {
               exact
               component={() => <User users={users} updateUser={updateUser} />}
             />
-          </switch>
+          </Switch>
         </div>
       </Router>
     );
