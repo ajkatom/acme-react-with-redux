@@ -35,7 +35,7 @@ export default class User extends Component {
         <form onSubmit={onSave}>
           <input value={user} onChange={onChange} />
           <button value={user} onClick={onClick}>
-            create
+            update
           </button>
         </form>
       </div>
